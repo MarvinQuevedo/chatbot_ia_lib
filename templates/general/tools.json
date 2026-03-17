@@ -1,0 +1,26 @@
+{
+  "tools": [
+    {
+      "_comment": "Example tool — replace or extend with your real API endpoints",
+      "name": "example_tool",
+      "description": "An example tool that demonstrates the tool definition format",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The search query or identifier"
+          }
+        },
+        "required": ["query"]
+      },
+      "endpoint": {
+        "method": "GET",
+        "url": "https://api.example.com/search?q={{query}}"
+      },
+      "responseMapping": {
+        "template": "Found result: {{title}} - {{description}}"
+      }
+    }
+  ]
+}

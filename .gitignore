@@ -1,4 +1,34 @@
+# chatbot-ia-lib — Gitignore
+
+# Dependencies
 node_modules/
-dist/
+
+# Environment & Secrets
 .env
+.env.local
+.env.*.local
+config/auth.json
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs
+logs/
+*.log
+
+# OS
 .DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Build
+dist/
+coverage/
+
+# Model downloads (managed by Ollama)
+models/

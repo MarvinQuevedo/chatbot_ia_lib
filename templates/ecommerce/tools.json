@@ -1,0 +1,126 @@
+{
+  "tools": [
+    {
+      "name": "check_order_status",
+      "description": "Check the current status, shipping carrier, tracking number, and estimated delivery date for a customer order. Use this when the customer asks about their order, package, or delivery.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "The order number, e.g., ORD-1234 or #1234"
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email",
+            "description": "Customer email address for identity verification (optional but recommended)"
+          }
+        },
+        "required": ["order_id"]
+      },
+      "endpoint": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/orders/{{order_id}}"
+      },
+      "responseMapping": {
+        "template": "Order {{order_id}}: Status is '{{status}}'. Shipped on {{ship_date}} via {{carrier}} (tracking: {{tracking_number}}). Estimated delivery: {{delivery_date}}."
+      }
+    },
+    {
+      "name": "check_inventory",
+      "description": "Check if a product is in stock and how many units are available. Use this when the customer asks about product availability.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string",
+            "description": "The product SKU or identifier"
+          },
+          "product_name": {
+            "type": "string",
+            "description": "The product name if SKU is not available"
+          }
+        },
+        "required": []
+      },
+      "endpoint": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/inventory"
+      },
+      "responseMapping": {
+        "template": "Product '{{name}}' (SKU: {{sku}}): {{#if in_stock}}In stock ({{quantity}} units available).{{else}}Currently out of stock. Expected restock: {{restock_date}}.{{/if}}"
+      }
+    },
+    {
+      "name": "create_return_request",
+      "description": "Create a return or exchange request for a customer order. Use this after confirming the return is within the return window and the customer wants to proceed.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "The order number to return"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["defective", "wrong_item", "not_as_described", "changed_mind", "other"],
+            "description": "The reason for the return"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["refund", "exchange", "store_credit"],
+            "description": "What the customer wants: a refund, an exchange, or store credit"
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email",
+            "description": "Customer email for return label and confirmation"
+          }
+        },
+        "required": ["order_id", "reason", "type", "customer_email"]
+      },
+      "endpoint": {
+        "method": "POST",
+        "url": "{{apiBaseUrl}}/returns"
+      },
+      "responseMapping": {
+        "template": "Return request created (ID: {{return_id}}). A prepaid shipping label has been sent to {{email}}. Once we receive the item, your {{type}} will be processed within 5-7 business days."
+      }
+    },
+    {
+      "name": "create_support_ticket",
+      "description": "Create a support ticket when the issue cannot be resolved automatically or when the customer requests human assistance.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_email": {
+            "type": "string",
+            "format": "email",
+            "description": "Customer email for follow-up"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Short description of the issue"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the issue based on the conversation"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["low", "normal", "high", "urgent"],
+            "description": "Ticket priority — use 'high' for frustrated customers, 'urgent' for legal threats"
+          }
+        },
+        "required": ["customer_email", "subject", "description"]
+      },
+      "endpoint": {
+        "method": "POST",
+        "url": "{{apiBaseUrl}}/support/tickets"
+      },
+      "responseMapping": {
+        "template": "Support ticket #{{ticket_id}} has been created. Our team will contact you at {{email}} within {{response_time}} business hours."
+      }
+    }
+  ]
+}

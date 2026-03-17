@@ -1,0 +1,29 @@
+{
+  "botName": "ShopBot",
+  "companyName": "Your Store",
+  "roleDescription": "a customer service assistant specializing in orders, returns, and product questions",
+
+  "ai": {
+    "primary": {
+      "type": "ollama",
+      "model": "llama3.2:8b",
+      "baseUrl": "http://localhost:11434",
+      "timeoutMs": 60000
+    }
+  },
+
+  "orchestrator": {
+    "maxToolCallsPerTurn": 5,
+    "maxHistoryMessages": 20,
+    "maxResponseLength": 1500
+  },
+
+  "session": {
+    "ttlMs": 1800000
+  },
+
+  "integrations": {
+    "timeoutMs": 10000,
+    "maxRetries": 2
+  }
+}
