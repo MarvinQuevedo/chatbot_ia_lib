@@ -77,7 +77,8 @@ graph TD
 **What it solves**: Removes the barrier of AI/ML expertise for deploying a chatbot. A developer shouldn't need to know what "quantization" means to get started.
 
 **Key design decisions**:
-- CLI-based (not GUI) — simpler to build, works in CI/CD
+- Dual-mode interface: CLI (fast, headless) or Web UI (visual, guided)
+- CLI-based by default for dev workflows, `--ui` flag for visual setup
 - Supports 3 platforms: macOS, Linux, Windows
 - Decision matrix handles GPU/CPU/RAM combinations
 - User can always override recommendations

@@ -31,6 +31,13 @@
 
 - **FR1.6 — Doctor Command**: `chatbot-ia-lib doctor` command that re-runs all validation checks and diagnoses common issues (Ollama not running, model not found, API key expired, disk full).
 
+- **FR1.7 — Web Setup UI**: Launch a local web server that provides a graphical setup wizard. Must include:
+  - Hardware visualization dashboard
+  - One-click model installation/pulling
+  - Interactive editors for rules and tool definitions
+  - Real-time pre-flight validation status
+  - Built-in test chat for final verification
+
 ---
 
 ### 2. Core Chatbot Logic

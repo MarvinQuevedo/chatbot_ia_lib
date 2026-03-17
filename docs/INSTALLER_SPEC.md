@@ -7,14 +7,14 @@ The Installer is the **entry point** of the library. It ensures the system is op
 ## Overview
 
 ```bash
-# Full interactive setup
+# Full interactive CLI setup (default)
 npx chatbot-ia-lib init
+
+# Web-based setup UI
+npx chatbot-ia-lib init --ui
 
 # Non-interactive with flags
 npx chatbot-ia-lib init --backend ollama --model llama3.2:8b --template ecommerce
-
-# Diagnostics
-npx chatbot-ia-lib doctor
 ```
 
 ---
@@ -314,11 +314,35 @@ Larger context windows use more memory. The installer sets this based on availab
 
 ---
 
-## 6. CLI Commands Summary
+---
+
+## 7. Web-Based Setup UI (Optional)
+
+For users who prefer a graphical interface, `npx chatbot-ia-lib init --ui` launches a local temporary server.
+
+### 7.1 Web UI Flow
+
+1. **Launcher**: CLI check if port 3000 is open -> starts Express server -> opens browser to `http://localhost:3000/setup`.
+2. **Dashboard**:
+   - Visual hardware report (Green/Yellow/Red indicators).
+   - "One-click" install for the recommended model.
+   - Real-time download progress bars.
+3. **Configuration Wizard**:
+   - Tabbed interface for rules, tools, and prompts.
+   - Markdown editor with live preview for `rules.md`.
+   - Form-based tool builder for `tools.json`.
+4. **Final Check**:
+   - "Test Chat" window inside the web UI to verify the bot before completing setup.
+   - Button to "Save & Exit" (kills the web server and cleans up).
+
+---
+
+## 8. CLI Commands Summary
 
 | Command | Description |
 |:---|:---|
-| `chatbot-ia-lib init` | Full interactive setup wizard |
+| `chatbot-ia-lib init` | Full interactive CLI setup wizard |
+| `chatbot-ia-lib init --ui` | Launch Web-based Setup UI |
 | `chatbot-ia-lib init --backend <type>` | Skip backend selection (ollama / cloud) |
 | `chatbot-ia-lib init --model <name>` | Skip model recommendation |
 | `chatbot-ia-lib init --template <type>` | Skip template selection (ecommerce / support / general) |

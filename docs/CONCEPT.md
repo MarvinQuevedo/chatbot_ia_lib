@@ -17,6 +17,7 @@ The key innovation is separating the **CORE engine** (which never changes) from 
 A **smart installer** handles the heavy lifting:
 - Detects system hardware and recommends the best AI model
 - Automatically sets up the local LLM runtime (Ollama) or configures cloud API keys
+- Offers a **CLI Guide** or a **Web-based Setup UI** for intuitive configuration
 - Generates starter configuration files with documented examples
 - Validates the environment is ready before first run
 

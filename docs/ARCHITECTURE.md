@@ -52,11 +52,15 @@ graph TD
     Integration --> Webhooks[Webhooks / Events]
     
     subgraph "Setup & Lifecycle"
-        Installer[Smart Installer CLI]
-        Installer --> HWDetect[Hardware Detection]
-        Installer --> EnvSetup[Environment Setup]
-        Installer --> ConfigGen[Config Generation]
-        Installer --> Validator[Readiness Validator]
+        InstallerCLI[Smart Installer CLI]
+        InstallerWeb[Web Setup UI]
+        
+        InstallerCLI --> HWDetect[Hardware Detection]
+        InstallerWeb --> HWDetect
+        
+        HWDetect --> EnvSetup[Environment Setup]
+        EnvSetup --> ConfigGen[Config Generation]
+        ConfigGen --> Validator[Readiness Validator]
     end
     
     subgraph "Observability"
@@ -74,9 +78,11 @@ graph TD
 
 ## Component Details
 
-### 1. Smart Installer CLI (`installer/`)
+### 1. Unified Installer (`installer/`)
 
-The entry point for new installations. Guides the developer through setup with zero AI knowledge required.
+The entry point for new installations. Offers two modes:
+- **Interactive CLI**: For fast, keyboard-driven setup.
+- **Web Setup UI**: A local-run web interface for an even more intuitive, guided experience.
 
 **Responsibilities:**
 - Detect system hardware (CPU features, GPU type & VRAM, RAM, disk space)
@@ -89,13 +95,16 @@ The entry point for new installations. Guides the developer through setup with z
 **Key Files:**
 ```
 installer/
-├── index.js              # CLI entry point
-├── hardware-detector.js  # CPU/GPU/RAM/disk detection
-├── model-recommender.js  # Decision matrix logic
-├── ollama-setup.js       # Ollama installation & model pulling
-├── cloud-setup.js        # API key configuration & validation
-├── config-generator.js   # Generate initial config files
-└── validator.js          # Environment readiness checks
+├── cli/                  # CLI implementation (Commander.js)
+├── web-ui/               # Web-based setup interface (Express + Vanilla JS)
+├── shared/               # Core installer logic used by both CLI and Web
+│   ├── hardware-detector.js
+│   ├── model-recommender.js
+│   ├── ollama-setup.js
+│   ├── cloud-setup.js
+│   ├── config-generator.js
+│   └── validator.js
+└── index.js              # Launcher dispatching to CLI or Web
 ```
 
 **Interface Contract:**
@@ -476,13 +485,16 @@ chatbot-ia-lib/
 ├── bin/
 │   └── cli.js                    # npx chatbot-ia-lib [command]
 ├── installer/
-│   ├── index.js
-│   ├── hardware-detector.js
-│   ├── model-recommender.js
-│   ├── ollama-setup.js
-│   ├── cloud-setup.js
-│   ├── config-generator.js
-│   └── validator.js
+│   ├── index.js                  # Entry point (npx chatbot-ia-lib init)
+│   ├── cli/                      # CLI-specific logic
+│   ├── web-ui/                   # Web interface files (bundled)
+│   └── shared/                   # Logic shared by CLI and Web
+│       ├── hardware-detector.js
+│       ├── model-recommender.js
+│       ├── ollama-setup.js
+│       ├── cloud-setup.js
+│       ├── config-generator.js
+│       └── validator.js
 ├── core/
 │   ├── orchestrator.js
 │   ├── session-manager.js
@@ -542,4 +554,4 @@ chatbot-ia-lib/
 | **CLI** | Commander.js | Standard Node.js CLI framework |
 | **Template Engine** | Handlebars | For prompt templates with logic (if/each/helpers) |
 | **Testing** | Vitest | Fast, modern, compatible with ESM |
-| **Admin Dashboard** | Express + vanilla HTML/CSS/JS | Lightweight, no framework dependency |
+| **Admin & Installer UI** | Express + Vanilla HTML/CSS/JS | Lightweight, no framework dependency for the library itself |
